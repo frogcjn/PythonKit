@@ -53,6 +53,18 @@ let PyEval_GetBuiltins: @convention(c) () -> PyObjectPointer =
 let PyRun_SimpleString: @convention(c) (PyCCharPointer) -> Void =
     PythonLibrary.loadSymbol(name: "PyRun_SimpleString")
 
+// PyObject* PyRun_String(const char *str, int start, PyObject *globals, PyObject *locals)
+// http://boost.cppll.jp/HEAD/libs/python/doc/tutorial/doc/using_the_interpreter.html
+// object is returned depends on the start paramater.
+let PyRun_String: @convention(c) (PyCCharPointer, Int, PyObjectPointer?, PyObjectPointer?) -> PyObjectPointer? =
+    PythonLibrary.loadSymbol(name: "PyRun_String")
+
+enum PyStartSymbol : Int {
+    case   evalInput = 258 // for interpreting isolated expressions
+    case singleInput = 256 // for interpreting a single statement
+    case   fileInput = 257 // for interpreting sequences of statements
+}
+
 let PyErr_Occurred: @convention(c) () -> PyObjectPointer? =
   PythonLibrary.loadSymbol(name: "PyErr_Occurred")
 

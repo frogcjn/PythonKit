@@ -665,6 +665,12 @@ public struct PythonInterface {
         sys.executable = os.path.join(sys.exec_prefix, 'bin', 'python3')
       """)
   }
+    public func eval(_ string: String) -> PythonObject? {
+        guard let result = PyRun_String(string, PyStartSymbol.evalInput.rawValue, builtins.borrowedPyObject, nil) else {
+            return nil
+        }
+        return PythonObject(result)
+    }
 
   public func attemptImport(_ name: String) throws -> PythonObject {
     guard let module = PyImport_ImportModule(name) else {
